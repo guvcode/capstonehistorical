@@ -75,7 +75,7 @@ const Header = () => {
               </div>
               <div className="flex items-center justify-center pr-16 lg:pr-0">
                
-                <div>{/* <ThemeToggler /> */}</div>
+                <div><ThemeToggler /></div>
               </div>
             </div>
           </div>
