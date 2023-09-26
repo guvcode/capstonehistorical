@@ -15,7 +15,7 @@ module.exports = {
       current: "currentColor",
       transparent: "transparent",
       white: "#FFFFFF",
-      black: "#FFFFFF",
+      black: "#090E34",
       dark: "#1D2144",
       primary: "#4A6CF7",
       yellow: "#FBB040",
@@ -24,7 +24,6 @@ module.exports = {
     screens: {
       xs: "450px",
       // => @media (min-width: 450px) { ... }
-
       sm: "575px",
       // => @media (min-width: 576px) { ... }
 
