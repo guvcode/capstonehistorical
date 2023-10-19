@@ -57,7 +57,7 @@ const Header = () => {
                     sticky ? "py-5 lg:py-2" : "py-8"
                   } `}
                 >
-                  <Image
+                  {/* <Image
                     src="/images/logo/logo.png"
                     alt="logo"
                     width={140}
@@ -70,7 +70,7 @@ const Header = () => {
                     width={140}
                     height={30}
                     className="hidden w-full dark:block"
-                  />
+                  /> */}
                 </Link>
               </div>
               <div className="flex items-center justify-center pr-16 lg:pr-0">

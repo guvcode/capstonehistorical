@@ -4,7 +4,7 @@ import "ka-table/style.css";
 import React from "react";
 import Image from "next/image";
 import { Table } from "ka-table";
-import { DataType, EditingMode, SortingMode } from "ka-table/enums";
+import { DataType, SortingMode } from "ka-table/enums";
 import { useState, useEffect } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
@@ -12,10 +12,7 @@ import {
   LineChart,
   Line,
   XAxis,
-  YAxis,
   CartesianGrid,
-  Tooltip,
-  Legend,
 } from "recharts";
 
 const presentList = ["PC", "P", "CP", "LATE", "PP", "PA", "PRESENT"];
