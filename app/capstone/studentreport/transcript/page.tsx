@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Table } from "ka-table";
 import { DataType, EditingMode, SortDirection, SortingMode } from "ka-table/enums";
 import { useState, useEffect } from "react";
-
+import { useSearchParams } from "next/navigation";
 
 const imageStyles = {
   width: "900px",
@@ -24,6 +24,7 @@ const StudentReport = () => {
   const [gridData, setgridDate] = useState([]);
   const [scoresGridData, setScoregridDate] = useState([]);
 
+  const searchParams = useSearchParams();
   let componentRef = useRef<HTMLDivElement>(null);
 
   /*  const handleDownload = useReactToPrint({
@@ -41,7 +42,8 @@ const StudentReport = () => {
     },
   }); */
   useEffect(() => {
-    fetch("/api/students/zubeida.ogh@gmail.com")
+    const email = searchParams.get("email");
+    fetch(`/api/students/${email}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.data.docscores.length > 0)
@@ -52,7 +54,7 @@ const StudentReport = () => {
           setgridDate(
             data.data.doc.map(
               (
-                { _id, email, name, instructor, classtime, course, ...item },
+                { _id, email, studentId, name, instructor, classtime, course, ...item },
                 index
               ) => {
                 let oneOrZero = 0;
@@ -91,12 +93,12 @@ const StudentReport = () => {
       <section
         className="relative z-10 pt-36 pb-16 md:pb-20 lg:pt-[180px] lg:pb-28"
         id="element-to-download-as-pdf"
-        /* style={{
-          opacity: "0.5",
-          backgroundImage: "url(/images/logo/logo.png)",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-        }} */
+      /* style={{
+        opacity: "0.5",
+        backgroundImage: "url(/images/logo/logo.png)",
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+      }} */
       >
         <div className="absolute top-1/2 left-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2 transform">
           <img src="/images/logo/logologo.png" style={imageStyles} />
@@ -1004,7 +1006,7 @@ function transcriptHeaderTable(doc: any) {
       <Table
         columns={[
           {
-            key: "studentID",
+            key: "studentId",
             title: "Id Number",
             dataType: DataType.String,
           },
@@ -1077,6 +1079,7 @@ const getLetterGrade = (score: number) => {
           */
 
 const getCourseCode = (course: string) => {
+  console.log(course.trim())
   switch (course.trim().toUpperCase()) {
     case "Business Writing and Presentation Skills".toUpperCase():
     case "Business Writing and Presentation".toUpperCase():
@@ -1087,6 +1090,7 @@ const getCourseCode = (course: string) => {
       return "BSA-223";
     case "Management Practices".toUpperCase():
     case "Fundamentals Management Practices".toUpperCase():
+    case "Fundamental Management Practices".toUpperCase():
       return "BSA-224";
     case "Marketing".toUpperCase():
       return "BSA-225";
@@ -1101,9 +1105,11 @@ const getCourseCode = (course: string) => {
       return "BSA-229";
     case "Small Business Management".toUpperCase():
     case "Small Business Management – Entrepreneurship".toUpperCase():
+    case "Entrepreneurship – Small Business Management".toUpperCase():
       return "BSA-230";
     case "Business Ethics (Corporate Social Responsibility)".toUpperCase():
     case "Business Ethics (CSR)".toUpperCase():
+    case "Corporate Social Responsibility: Business Ethics".toUpperCase():
       return "BSA-231";
     case "Social Marketing and E-Commerce".toUpperCase():
       return "BSA-232";
@@ -1121,7 +1127,43 @@ const getCourseCode = (course: string) => {
       return "BSA-237";
     case "Professional Sales Skills".toUpperCase():
       return "BSA-238";
+    case "Administrative Skills in Health Care".toUpperCase():
+      return "MOA-227";
+    case "Clinical Skills for Health Care".toUpperCase():
+      return "MOA-229";
+    case "Communication for Medical Assistant".toUpperCase():
+      return "MOA-224";
+    case "HEALTH CARE FUNDAMENTALS / ETHICS".toUpperCase():
+    case "Health Care Fundamentals/Ethics".toUpperCase():
+    case "Health Care Fundamentals".toUpperCase():
+      return "MOA-223";
+    case "Information System for Office Management".toUpperCase():
+      return "MOA-230";
+    case "Introduction to Accounting for Medical office".toUpperCase():
+      return "MOA-228";
+    case "Introduction to Computer for Medical assistant".toUpperCase():
+      return "MOA-221";
+    case "Medical Terminology Part 1 & Part 2".toUpperCase():
+    case "Medical Terminology - Part 1 & Part 2".toUpperCase():
+      return "MOA-225/226";
+    case "Role Concept in Health care".toUpperCase():
+      return "MOA-222";
     default:
       return "-";
   }
 };
+
+
+/*
+Introduction to Computer for Medical assistant – MOA 221
+ Role Concept in Health care MOA 222
+ Health Care Fundamentals  MOA 223
+ Communication for Medical Assistant MOA 224
+ Medical Terminology - Part 1 MOA 225
+ Medical Terminology - Part 2 MOA 226
+ Administrative Skills in Health Care MOA 227
+ Introduction to Accounting for Medical office MOA 228
+ Clinical Skills for Health Care MOA 229
+ Information System for Office Management MOA 230
+
+*/

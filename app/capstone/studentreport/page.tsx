@@ -22,7 +22,7 @@ const StudentReport = () => {
   const [isLoading, setLoading] = useState(true);
   const [gridData, setgridDate] = useState([]);
   const [scoresGridData, setScoregridDate] = useState([]);
-   const [usemakeup, setUsemakeup] = useState("0");
+  const [usemakeup, setUsemakeup] = useState("0");
 
   const searchParams = useSearchParams();
 
@@ -95,27 +95,9 @@ const StudentReport = () => {
                 {data.length > 0
                   ? attendanceHeadertable(data, usemakeup)
                   : null}
-                <LineChart
-                  width={1200}
-                  height={300}
-                  data={gridData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="classDate"
-                    style={{
-                      fontSize: "10",
-                    }}
-                  />
-                  {/* <Tooltip /> */}
-                  <Line type="monotone" dataKey="oneOrZero" stroke="#8884d8" />
-                </LineChart>
+                <div className="m-12" style={{ width: "90%", height: "180px" }}>
+                  {lineGraph(gridData)}
+                </div>
                 <div style={{ pageBreakBefore: "always" }}></div>
                 {attendancetable(gridData, usemakeup)}
                 <hr />
@@ -501,7 +483,7 @@ const StudentReport = () => {
             </defs>
           </svg>
         </div>
-      </section>
+      </section >
     </>
   );
 };
@@ -510,100 +492,129 @@ export default StudentReport;
 
 function attendancetable(gridData: any, usemakeup: string) {
   return (
-    <Table
-      columns={[
-        {
-          key: "classDate",
-          title: "Date",
-          dataType: DataType.String,
-        },
-        {
-          key: "attendanceStatus",
-          title: "Status",
-          dataType: DataType.String,
-        },
-        {
-          key: "attendanceStatus",
-          title: "Extra Class",
-          dataType: DataType.String,
-        },
-        {
-          key: "attendanceStatus",
-          title: "Comment",
-          dataType: DataType.String,
-        },
-      ]}
-      format={({ column, value }) => {
-        if (column.key === "attendanceStatus" && column.title === "Status") {
-          if (presentList.includes(value?.trim().toUpperCase()))
-            return <FaCheck color="green" />;
-          return <FaTimes color="red" />;
-        }
-
-        if (
-          column.key === "attendanceStatus" &&
-          column.title === "Extra Class"
-        ) {
-          if (usemakeup === "0") return "-";
-          if (presentList.includes(value?.trim().toUpperCase()))
-            if (value.trim().toUpperCase() == "PP")
+    <div className="m-12">
+      <Table
+        columns={[
+          {
+            key: "classDate",
+            title: "Date",
+            dataType: DataType.String,
+          },
+          {
+            key: "attendanceStatus",
+            title: "Status",
+            dataType: DataType.String,
+          },
+          {
+            key: "attendanceStatus",
+            title: "Extra Class",
+            dataType: DataType.String,
+          },
+          {
+            key: "attendanceStatus",
+            title: "Comment",
+            dataType: DataType.String,
+          },
+        ]}
+        format={({ column, value }) => {
+          if (column.key === "attendanceStatus" && column.title === "Status") {
+            if (presentList.includes(value?.trim().toUpperCase()))
               return <FaCheck color="green" />;
-          if (value.trim().toUpperCase() == "PA")
             return <FaTimes color="red" />;
-          if (value.trim().toUpperCase() == "AP")
-            return <FaCheck color="green" />;
-        }
-      }}
-      data={gridData}
-      //editingMode={EditingMode.Cell}
-      rowKeyField={"id"}
-      sortingMode={SortingMode.Single}
-      childComponents={{
-        dataRow: {
-          elementAttributes: ({ rowData, index }) => ({
-            style: {
-              backgroundColor:
-                rowData.id % 2 ? "rgba(0, 0, 0, 0.05)" : "rgba(0, 0, 0, 0)",
-            },
-          }),
-        },
-      }}
-    />
+          }
+
+          if (
+            column.key === "attendanceStatus" &&
+            column.title === "Extra Class"
+          ) {
+            if (usemakeup === "0") return "-";
+            if (presentList.includes(value?.trim().toUpperCase()))
+              if (value.trim().toUpperCase() == "PP")
+                return <FaCheck color="green" />;
+            if (value.trim().toUpperCase() == "PA")
+              return <FaTimes color="red" />;
+            if (value.trim().toUpperCase() == "AP")
+              return <FaCheck color="green" />;
+          }
+        }}
+        data={gridData}
+        //editingMode={EditingMode.Cell}
+        rowKeyField={"id"}
+        sortingMode={SortingMode.Single}
+        childComponents={{
+          dataRow: {
+            elementAttributes: ({ rowData, index }) => ({
+              style: {
+                backgroundColor:
+                  rowData.id % 2 ? "rgba(0, 0, 0, 0.05)" : "rgba(0, 0, 0, 0)",
+              },
+            }),
+          },
+        }}
+      />
+    </div>
   );
 }
 
 function scorestable(gridData: any) {
   if (gridData.length < 1) return null;
   return (
-    <Table
-      columns={[
-        {
-          key: "type",
-          title: "",
-          dataType: DataType.String,
-        },
-        {
-          key: "score",
-          title: "Grade",
-          dataType: DataType.String,
-        },
-      ]}
-      data={gridData}
-      rowKeyField={"id"}
-      sortingMode={SortingMode.Single}
-      childComponents={{
-        dataRow: {
-          elementAttributes: ({ rowData, index }) => ({
-            style: {
-              backgroundColor:
-                rowData.id % 2 ? "rgba(0, 0, 0, 0.05)" : "rgba(0, 0, 0, 0)",
-            },
-          }),
-        },
-      }}
-    />
+    <div className="m-12">
+      <Table
+        columns={[
+          {
+            key: "type",
+            title: "",
+            dataType: DataType.String,
+          },
+          {
+            key: "score",
+            title: "Grade",
+            dataType: DataType.String,
+          },
+        ]}
+        data={gridData}
+        rowKeyField={"id"}
+        sortingMode={SortingMode.Single}
+        childComponents={{
+          dataRow: {
+            elementAttributes: ({ rowData, index }) => ({
+              style: {
+                backgroundColor:
+                  rowData.id % 2 ? "rgba(0, 0, 0, 0.05)" : "rgba(0, 0, 0, 0)",
+              },
+            }),
+          },
+        }}
+      />
+    </div>
   );
 }
+
+function lineGraph(gridData: any) {
+  return (<LineChart
+    width={800}
+    height={220}
+    data={gridData}
+    margin={{
+      top: 5,
+      right: 10,
+      left: 2,
+      bottom: 5,
+    }}
+  >
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis
+      dataKey="classDate"
+      style={{
+        fontSize: "10",
+      }}
+    />
+    {/* <Tooltip /> */}
+    <Line type="monotone" dataKey="oneOrZero" stroke="#8884d8" />
+  </LineChart>)
+}
+
 
 function attendanceHeadertable(doc: any, usemakeup: string) {
   //const doc = data.data.doc;
