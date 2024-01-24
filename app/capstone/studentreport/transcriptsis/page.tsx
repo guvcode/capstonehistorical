@@ -21,59 +21,18 @@ const presentList = ["PC", "P", "CP", "LATE", "PP", "PA", "AP",];
 const StudentReport = () => {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [gridData, setgridDate] = useState([]);
-  const [scoresGridData, setScoregridDate] = useState([]);
+
 
   const searchParams = useSearchParams();
   let componentRef = useRef<HTMLDivElement>(null);
 
-  /*  const handleDownload = useReactToPrint({
-    onPrintError: (error) => console.log(error),
-    content: () => componentRef.current,
-    removeAfterPrint: true,
-    print: async (printIframe) => {
-      const document = printIframe.contentDocument;
-      if (document) {
-        const html = document.getElementById("element-to-download-as-pdf");
-        console.log(html);
-        const exporter = new Html2Pdf(html, { filename: "test.pdf" });
-        exporter.getPdf(true);
-      }
-    },
-  }); */
   useEffect(() => {
     const email = searchParams.get("email");
-    fetch(`/api/students/${email}`)
+    fetch(`/api/students/${email}/sis`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.data.docscores.length > 0)
-          setScoregridDate(data.data.docscores);
-
-        if (data.data.doc.length > 0) {
-          setData(data.data.doc);
-          setgridDate(
-            data.data.doc.map(
-              (
-                { _id, email, studentId, name, instructor, classtime, course, ...item },
-                index
-              ) => {
-                let oneOrZero = 0;
-                //let classTimeTrimmed =
-                if (
-                  presentList.includes(
-                    item.attendanceStatus.trim().toUpperCase()
-                  )
-                )
-                  oneOrZero = 1;
-                return {
-                  ...item,
-                  classDate: item.classDate.substring(0, 10),
-                  id: index + 1,
-                  oneOrZero: oneOrZero,
-                };
-              }
-            )
-          );
+        if (data.data.docscoresSis.length > 0) {
+          setData(data.data.docscoresSis);
         }
         setLoading(false);
       });
@@ -122,8 +81,8 @@ const StudentReport = () => {
                   </h3>
                   <h5>-- UNDERGRADUATE --</h5>
                 </div>
-                {transcriptHeaderTable(scoresGridData)}
-                {transcriptTable(scoresGridData)}
+                {transcriptHeaderTable(data)}
+                {transcriptTable(data)}
                 <hr />
                 <br />
                 <br />
@@ -524,7 +483,7 @@ const StudentReport = () => {
   );
 };
 
-const PageBody = (scoresGridData) => {
+const PageBody = (data) => {
   return (
     <section
       className="relative z-10 pt-36 pb-16 md:pb-20 lg:pt-[180px] lg:pb-28"
@@ -549,8 +508,8 @@ const PageBody = (scoresGridData) => {
                 </h3>
                 <h5>-- UNDERGRADUATE --</h5>
               </div>
-              {transcriptHeaderTable(scoresGridData)}
-              {transcriptTable(scoresGridData)}
+              {transcriptHeaderTable(data)}
+              {transcriptTable(data)}
               <hr />
 
               <span className="text-center text-xs text-body-color">
@@ -943,13 +902,13 @@ function transcriptTable(gridData: any) {
     <Table
       columns={[
         {
-          key: "type",
+          key: "Course #",
           title: "Course Code",
           dataType: DataType.String,
           style: { fontWeight: "bold" },
         },
         {
-          key: "type",
+          key: "Course Title",
           title: "Course Title",
           dataType: DataType.String,
           style: { fontWeight: "bold" },
@@ -957,13 +916,13 @@ function transcriptTable(gridData: any) {
           sortDirection: SortDirection.Ascend
         },
         {
-          key: "score",
+          key: "Actual Grade",
           title: "Grade",
           dataType: DataType.String,
           style: { fontWeight: "bold" },
         },
         {
-          key: "score",
+          key: "Actual Grade",
           title: "Letter Grade",
           dataType: DataType.String,
           style: { fontWeight: "bold" },
@@ -977,9 +936,9 @@ function transcriptTable(gridData: any) {
           return getLetterGrade(value);
         }
 
-        if (column.title === "Course Code") {
+       /*  if (column.title === "Course Code") {
           return getCourseCode(value);
-        }
+        } */
       }}
       childComponents={{
         dataRow: {
@@ -1006,7 +965,7 @@ function transcriptHeaderTable(doc: any) {
       <Table
         columns={[
           {
-            key: "studentId",
+            key: "studentID",
             title: "Id Number",
             dataType: DataType.String,
           },
@@ -1016,7 +975,7 @@ function transcriptHeaderTable(doc: any) {
             dataType: DataType.String,
           },
           {
-            key: "course",
+            key: "program",
             title: "Program",
             dataType: DataType.String,
           },
@@ -1139,15 +1098,18 @@ const getCourseCode = (course: string) => {
     case "Professional Sales Skills".toUpperCase():
       return "BSA-238";
     case "Administrative Skills in Health Care".toUpperCase():
+    case "Administrative Skills / Administration Fundamentals".toUpperCase():
       return "MOA-102";
     case "Clinical Skills for Health Care".toUpperCase():
       return "MOA-108";
     case "Communication for Medical Assistant".toUpperCase():
+    case "Communication, Business Writing and Presentation Skills".toUpperCase():
       return "MOA-104";
     case "HEALTH CARE FUNDAMENTALS / ETHICS".toUpperCase():
     case "Health Care Fundamentals/Ethics".toUpperCase():
     case "Health Care Fundamentals".toUpperCase():
     case "Health Care Fundamentals / Ethics".toUpperCase():
+    case "Ethics, Business Laws and Social Responsibility".toUpperCase():
       return "MOA-105";
     case "Information System for Office Management".toUpperCase():
       return "MOA-107";
@@ -1156,74 +1118,17 @@ const getCourseCode = (course: string) => {
     case "Introduction to Computer for Medical assistant".toUpperCase():
       return "MOA-101";
     case "Medical Terminology Part 1".toUpperCase():
+    case "Medical Terminologies Part 1".toUpperCase():
       return "MOA-109";
     case "Medical Terminology Part 2".toUpperCase():
+    case "Medical Terminologies Part 2".toUpperCase():
       return "MOA-110";
     case "Medical Terminology Part 1 & Part 2".toUpperCase():
-    case "Medical Terminology - Part 1 & Part 2".toUpperCase():
       return "MOA-109/110";
     case "Role Concept in Health care".toUpperCase():
       return "MOA-111";
-    case "Supported Educational Assistant".toUpperCase():
-      return "CSW101";
-    case "Essential Life Skills".toUpperCase():
-      return "CSW102";
-    case "Introduction to Human Services".toUpperCase():
-      return "CSW103";
-    case "Communication Skills for Counselling".toUpperCase():
-      return "CSW104";
-    case "Counselling Theories".toUpperCase():
-      return "CSW105";
-    case "Understanding Addictions".toUpperCase():
-      return "CSW106";
-    case "Psychosocial Rehabilitation and Care Planning".toUpperCase():
-      return "CSW107";
-    case "Applied Behavioural Analysis".toUpperCase():
-      return "CSW108";
-    case "Mental Health CSW109".toUpperCase():
-      return "CSW109";
-    case "Intellectual and Developmental Disabilities".toUpperCase():
-      return "CSW110";
-    case "Group Counselling Foundations".toUpperCase():
-      return "CSW111";
-    case "Gerontology and End of Life Care".toUpperCase():
-      return "CSW112";
-    case "Self Care".toUpperCase():
-      return "CSW113";
-    case "Family Systems Theory".toUpperCase():
-      return "CSW114";
-    case "Child and Adolescent Growth and Development".toUpperCase():
-      return "CSW115";
-    case "MS Office Applications".toUpperCase():
-      return "CSW116";
-    case "Career Preparation".toUpperCase():
-      return "CSW117";
-    case "Interpersonal Communication, Recording and Reporting".toUpperCase():
-      return "CSW119";
-    case "Youth at Risk".toUpperCase():
-      return "CSW120";
-    case "Ethical ractice and Legislation".toUpperCase():
-      return "CSW121";
-    case "Indigenous Studies".toUpperCase():
-      return "CSW122";
-    case "Understanding Cultural and Social Differences".toUpperCase():
-      return "CSW123";
     default:
       return "-";
   }
 };
 
-
-/*
-Introduction to Computer for Medical assistant – MOA 221
- Role Concept in Health care MOA 222
- Health Care Fundamentals  MOA 223
- Communication for Medical Assistant MOA 224
- Medical Terminology - Part 1 MOA 225
- Medical Terminology - Part 2 MOA 226
- Administrative Skills in Health Care MOA 227
- Introduction to Accounting for Medical office MOA 228
- Clinical Skills for Health Care MOA 229
- Information System for Office Management MOA 230
-
-*/
