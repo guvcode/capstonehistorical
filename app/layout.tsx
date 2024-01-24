@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import "node_modules/react-modal-video/css/modal-video.css";
 import "../styles/index.css";
 import "../styles/kaoverides.css";
+import '../styles/global.css'
 
 export default function RootLayout({
   children,
@@ -22,7 +23,7 @@ export default function RootLayout({
 
       <body className="dark:bg-black">
         <Providers>
-          <Header /> 
+          <Header />
           {children}
           {/*<Footer />
            <ScrollToTop /> */}

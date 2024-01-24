@@ -101,7 +101,7 @@ const StudentReport = () => {
       }} */
       >
         <div className="absolute top-1/2 left-1/2 z-[-1] -translate-x-1/2 -translate-y-1/2 transform">
-          <img src="/images/logo/logologo.png" style={imageStyles} />
+          <img src="/images/logo/logologo.png" style={imageStyles}  id="bkgLogo" />
         </div>
         <div className="container">
           <div className="-mx-4 flex flex-wrap">

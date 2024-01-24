@@ -1,0 +1,14 @@
+
+@media print {
+    body {
+        background-image: url('/images/logo/logologo.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50%; /* Smaller size, adjust as needed */
+        -webkit-print-color-adjust: exact; /* Helps with printing background colors and images in some browsers */
+    }
+
+    #bkgLogo {
+        display: none;
+    }
+}
