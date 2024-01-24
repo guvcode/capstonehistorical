@@ -1167,6 +1167,7 @@ const getCourseCode = (course: string) => {
     case "Supported Educational Assistant".toUpperCase():
       return "CSW101";
     case "Essential Life Skills".toUpperCase():
+    case "Essential Life Skills & Supported Educational Assistant".toUpperCase():
       return "CSW102";
     case "Introduction to Human Services".toUpperCase():
       return "CSW103";
@@ -1180,11 +1181,13 @@ const getCourseCode = (course: string) => {
       return "CSW107";
     case "Applied Behavioural Analysis".toUpperCase():
       return "CSW108";
-    case "Mental Health CSW109".toUpperCase():
+    case "Mental Health".toUpperCase():
+    case "Mental Health & Understanding Addictions".toUpperCase():
       return "CSW109";
     case "Intellectual and Developmental Disabilities".toUpperCase():
       return "CSW110";
     case "Group Counselling Foundations".toUpperCase():
+    case "Group Counselling Foundations & Counselling Theories".toUpperCase():
       return "CSW111";
     case "Gerontology and End of Life Care".toUpperCase():
       return "CSW112";
@@ -1193,6 +1196,7 @@ const getCourseCode = (course: string) => {
     case "Family Systems Theory".toUpperCase():
       return "CSW114";
     case "Child and Adolescent Growth and Development".toUpperCase():
+    case "Child and Adolescent Growth and Development & Youth at Risk".toUpperCase():
       return "CSW115";
     case "MS Office Applications".toUpperCase():
       return "CSW116";
@@ -1202,7 +1206,7 @@ const getCourseCode = (course: string) => {
       return "CSW119";
     case "Youth at Risk".toUpperCase():
       return "CSW120";
-    case "Ethical ractice and Legislation".toUpperCase():
+    case "Ethical Practice and Legislation".toUpperCase():
       return "CSW121";
     case "Indigenous Studies".toUpperCase():
       return "CSW122";
